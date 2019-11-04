@@ -1,4 +1,42 @@
 server:
-  port: 8080
+  port: 8088
   tomcat:
     uri-encoding: utf-8
+spring:
+  datasource:                       ##数据源的相关配置
+    type: com.zaxxer.hikari.HikariDataSource      #数据源HikariCP
+    driver-class-name: com.mysql.jdbc.Driver      #驱动
+    url: jdbc:mysql://localhost:3306/movie?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: root
+    hikari:
+      connection-timeout: 30000             #等待连接池分配连接时间（毫秒）
+      minimum-idle: 5                       #最小连接数
+      maximum-pool-size: 15                 #最大连接数
+      auto-commit: true                     #自动提交
+      idle-timeout: 600000                  #一个连接idle状态的最大时长（毫秒），超时则被自动释放
+      pool-name: DatabookHikariCP           #连接池名称
+      max-lifetime: 28740000                #一个连接的生命时长（毫秒），超时而且没被使用则被释放
+      connection-test-query: SELECT 1       #测试连接语句
+  servlet:
+    multipart:
+      max-file-size: 10485670               #文件上传配置，限制10M
+      max-request-size: 10485670            #文件上传配置，限制10M
+
+
+mybatis:
+  type-aliases-package: com.next.pojo           #所有pojo类所在位置，别名
+  mapper-locations: classpath:mapper/*.xml      #mappper.xml位置
+
+#通用mapper配置
+mapper:
+  mappers: com.next.my.mapper.MyMapper
+  not-empty: false
+  identity: MYSQL
+#分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  support-methods-arguments: true
+  params: count=countSql
+
+
