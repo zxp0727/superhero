@@ -8,7 +8,7 @@ public class AppResponse<T> {
      * 返回值代码 由Status类定义
      * @see Status
      */
-    private int code;
+    private int status;
     /**
      * 返回的附加提示信息
      */
@@ -25,12 +25,12 @@ public class AppResponse<T> {
 
     /**
      * 全参构造方法
-     * @param code 状态码
+     * @param status 状态码
      * @param msg 附加提示信息
      * @param data 数据
      */
-    private AppResponse(int code, String msg, T data){
-        this.code = code;
+    private AppResponse(int status, String msg, T data){
+        this.status = status;
         this.msg = msg;
         this.data = data;
     }
@@ -155,12 +155,12 @@ public class AppResponse<T> {
         }
     }
 
-    public int getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getMsg() {
@@ -182,7 +182,7 @@ public class AppResponse<T> {
     @Override
     public String toString() {
         return "AppResponse{" +
-                "code=" + code +
+                "status=" + status +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';
