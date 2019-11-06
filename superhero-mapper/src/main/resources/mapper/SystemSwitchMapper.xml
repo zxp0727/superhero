@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.next.mapper.SystemSwitchMapper" >
+  <resultMap id="BaseResultMap" type="com.next.pojo.SystemSwitch" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="is_show_video" property="isShowVideo" jdbcType="INTEGER" />
+    <result column="app_weixin_login" property="appWeixinLogin" jdbcType="INTEGER" />
+    <result column="app_qq_login" property="appQqLogin" jdbcType="INTEGER" />
+    <result column="app_weibo_login" property="appWeiboLogin" jdbcType="INTEGER" />
+    <result column="mp_weixin_login" property="mpWeixinLogin" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

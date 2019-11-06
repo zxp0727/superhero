@@ -21,4 +21,5 @@ public class CarouselServiceImpl implements CarouselService {
         List<Carousel> carousels = carouselMapper.selectByExample(example);
         return carousels;
     }
+
 }

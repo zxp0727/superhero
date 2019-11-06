@@ -6,5 +6,9 @@ import java.util.List;
 
 public interface CarouselService {
 
+    /**
+     * 首页轮播图接口
+     * @return
+     */
     List<Carousel> queryAll();
 }

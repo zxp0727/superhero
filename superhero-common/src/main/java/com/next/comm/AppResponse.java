@@ -1,6 +1,7 @@
 package com.next.comm;
 
 import com.next.comm.constant.Status;
+import io.swagger.annotations.ApiModelProperty;
 
 @SuppressWarnings("ALL")
 public class AppResponse<T> {
@@ -8,14 +9,18 @@ public class AppResponse<T> {
      * 返回值代码 由Status类定义
      * @see Status
      */
+
+    @ApiModelProperty(value = "状态码")
     private int status;
     /**
      * 返回的附加提示信息
      */
+    @ApiModelProperty(value = "返回附加提示信息")
     private String msg;
     /**
      * 返回的数据 若没有则为空
      */
+    @ApiModelProperty(value = "返回的数据 若没有则为空")
     private T data;
 
     /**
@@ -65,6 +70,15 @@ public class AppResponse<T> {
         return builder().code(Status.OK).msg(msg).data(data).build();
     }
 
+    /**
+     * 返回成功，成功消息默认为OK
+     * @param data
+     * @param <T>
+     * @return
+     */
+    public static <T> AppResponse success(T data){
+        return builder().code(Status.OK).msg("OK").data(data).build();
+    }
     /**
      * 出错消息提示 该方法要求必须返回错误消息
      * @param msg  错误消息
