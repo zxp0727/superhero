@@ -34,4 +34,11 @@ public interface MovieService {
      * @return
      */
     JqGridResult queryMovieByKeyWordForPage(String keyWord, int page, int pageSize);
+
+    /**
+     * 根据电影主键获取电影信息
+     * @param trailerId
+     * @return
+     */
+    Movie getMovieByTrailerId(String trailerId);
 }

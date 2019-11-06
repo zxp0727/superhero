@@ -74,4 +74,9 @@ public class MovieServiceImpl implements MovieService {
         jqGridResult.setTotal(pageInfo.getPages());
         return jqGridResult;
     }
+
+    @Override
+    public Movie getMovieByTrailerId(String trailerId) {
+        return movieMapper.selectByPrimaryKey(trailerId);
+    }
 }
