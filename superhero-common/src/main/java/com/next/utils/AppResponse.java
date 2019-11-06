@@ -1,4 +1,4 @@
-package com.next.comm;
+package com.next.utils;
 
 import com.next.constant.Status;
 import io.swagger.annotations.ApiModelProperty;

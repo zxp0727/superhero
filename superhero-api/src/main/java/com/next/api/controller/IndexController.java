@@ -1,9 +1,12 @@
 package com.next.api.controller;
 
 import com.next.api.controller.basic.BasicController;
-import com.next.comm.AppResponse;
+import com.next.constant.CommobConstant;
+import com.next.pojo.Movie;
+import com.next.utils.AppResponse;
 import com.next.service.CarouselService;
 import com.next.service.MovieService;
+import com.next.utils.JsonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/index")
@@ -42,11 +48,17 @@ public class IndexController extends BasicController {
         return AppResponse.success("ok",movieService.queryHotMovieByType(type));
     }
 
+    @ApiOperation(value = "猜你喜欢")
     @PostMapping("/guessULike")
     public AppResponse guessULike(){
         //1.查询所有记录预告记录数
         int counts = movieService.queryAllTrailerCounts();
-        return AppResponse.success(guessULikeIndex(counts));
+        int[] guessULikeIndex = guessULikeIndex(counts);
+        List<Movie> movies = new ArrayList<>();
+        for (int i = 0; i < guessULikeIndex.length; i++){
+            movies.add(JsonUtils.jsonToPojo(redis.get(CommobConstant.GUESS_MOVIE_KEY+guessULikeIndex[i]),Movie.class));
+        }
+        return AppResponse.success(movies);
     }
 
 }

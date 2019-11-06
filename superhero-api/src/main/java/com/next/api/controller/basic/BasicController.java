@@ -19,12 +19,12 @@ public class BasicController {
     protected int[]  guessULikeIndex(int count){
         int[] guessULikeArray = new int[5];
         for (int i = 0; i < guessULikeArray.length; i++){
-            int index = (int) (Math.random()*count);
-            if(ArrayUtils.contains(guessULikeArray,index)){
+            int numIndex = (int)(Math.random() * count);
+            if(ArrayUtils.contains(guessULikeArray,numIndex)){
                 i--;
                 continue;
             }
-            guessULikeArray[i] = index;
+            guessULikeArray[i] = numIndex;
         }
         return guessULikeArray;
     }

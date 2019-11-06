@@ -45,4 +45,9 @@ public class MovieServiceImpl implements MovieService {
     public int queryAllTrailerCounts() {
         return movieMapper.selectCount(new Movie());
     }
+
+    @Override
+    public List<Movie> queryAllMovieTrailer() {
+        return movieMapper.selectAll();
+    }
 }

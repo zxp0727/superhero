@@ -18,4 +18,10 @@ public interface MovieService {
      * @return
      */
     int queryAllTrailerCounts();
+
+    /**
+     * 查询所有电影记录预告片
+     * @return
+     */
+    List<Movie> queryAllMovieTrailer();
 }
