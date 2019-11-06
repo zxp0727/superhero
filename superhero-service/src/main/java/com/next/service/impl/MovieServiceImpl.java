@@ -1,7 +1,7 @@
 package com.next.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.next.comm.constant.MovieTypeEnum;
+import com.next.constant.MovieTypeEnum;
 import com.next.mapper.MovieMapper;
 import com.next.pojo.Movie;
 import com.next.service.MovieService;

@@ -1,4 +1,4 @@
-package com.next.comm.constant;
+package com.next.constant;
 
 public enum Status {
     OK(200),

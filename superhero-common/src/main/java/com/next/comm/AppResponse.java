@@ -1,6 +1,6 @@
 package com.next.comm;
 
-import com.next.comm.constant.Status;
+import com.next.constant.Status;
 import io.swagger.annotations.ApiModelProperty;
 
 @SuppressWarnings("ALL")

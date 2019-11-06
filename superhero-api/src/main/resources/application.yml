@@ -22,7 +22,10 @@ spring:
     multipart:
       max-file-size: 10485670               #文件上传配置，限制10M
       max-request-size: 10485670            #文件上传配置，限制10M
-
+  redis:
+    database: 0                             #redis数据库编号，默认为0
+    host: 106.13.52.203                     #本地redis服务的内网ip(分布式环境，必须保证内网互通，并且在同一个网段)
+    port: 6379
 
 mybatis:
   type-aliases-package: com.next.pojo           #所有pojo类所在位置，别名
