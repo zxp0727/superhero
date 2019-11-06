@@ -31,13 +31,13 @@ public class IndexController extends BasicController {
     @Autowired
     private MovieService movieService;
 
-    @ApiOperation(value = "获取首页轮播图列表")
+    @ApiOperation(value = "获取首页轮播图列表", notes = "获取首页轮播图列表", httpMethod = "POST")
     @PostMapping("/carousel/list")
     public AppResponse queryAllCarousel(){
         return AppResponse.success("ok",carouselService.queryAll());
     }
 
-    @ApiOperation(value = "热门超英/热门预告")
+    @ApiOperation(value = "热门超英/热门预告", notes = "热门超英/热门预告", httpMethod = "POST")
     @PostMapping("/movie/hot")
     public AppResponse queryHotMovie(
             @ApiParam(name = "type", value = "[超英(superhero)/预告(trailer)]", required = true)
@@ -48,7 +48,7 @@ public class IndexController extends BasicController {
         return AppResponse.success("ok",movieService.queryHotMovieByType(type));
     }
 
-    @ApiOperation(value = "猜你喜欢")
+    @ApiOperation(value = "猜你喜欢", notes = "猜你喜欢", httpMethod = "POST")
     @PostMapping("/guessULike")
     public AppResponse guessULike(){
         //1.查询所有记录预告记录数

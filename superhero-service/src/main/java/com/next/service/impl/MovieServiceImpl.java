@@ -1,10 +1,12 @@
 package com.next.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.next.constant.MovieTypeEnum;
 import com.next.mapper.MovieMapper;
 import com.next.pojo.Movie;
 import com.next.service.MovieService;
+import com.next.utils.JqGridResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -49,5 +51,27 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> queryAllMovieTrailer() {
         return movieMapper.selectAll();
+    }
+
+    @Override
+    public JqGridResult queryMovieByKeyWordForPage(String keyWord, int page, int pageSize) {
+        Example example = new Example(Movie.class);
+        example.orderBy("createTime");
+
+        Example.Criteria criteria = example.createCriteria();
+        criteria.orLike("name", "%"+keyWord+"%");
+        criteria.orLike("originalName", "%"+keyWord+"%");
+
+        PageHelper.startPage(page,pageSize);
+
+        List<Movie> movies = movieMapper.selectByExample(example);
+
+        PageInfo<Movie> pageInfo = new PageInfo<>(movies);
+        JqGridResult jqGridResult = new JqGridResult();
+        jqGridResult.setPage(page);
+        jqGridResult.setRecords(pageInfo.getTotal());
+        jqGridResult.setRows(movies);
+        jqGridResult.setTotal(pageInfo.getPages());
+        return jqGridResult;
     }
 }

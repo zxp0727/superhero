@@ -1,6 +1,7 @@
 package com.next.service;
 
 import com.next.pojo.Movie;
+import com.next.utils.JqGridResult;
 
 import java.util.List;
 
@@ -24,4 +25,13 @@ public interface MovieService {
      * @return
      */
     List<Movie> queryAllMovieTrailer();
+
+    /**
+     * 根据关键模糊查询电影信息，分页展示
+     * @param keyWord
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    JqGridResult queryMovieByKeyWordForPage(String keyWord, int page, int pageSize);
 }
