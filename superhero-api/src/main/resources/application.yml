@@ -42,4 +42,8 @@ pagehelper:
   support-methods-arguments: true
   params: count=countSql
 
+weChat:
+  app_id: wx1234833e4ff45ca1
+  secret_key: 5508c3605cbac4339a238ada4fd039a6
+
 
