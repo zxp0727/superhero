@@ -1,7 +1,7 @@
 package com.next.api.controller;
 
 import com.next.api.controller.basic.BasicController;
-import com.next.constant.CommobConstant;
+import com.next.constant.CommonConstant;
 import com.next.pojo.Movie;
 import com.next.utils.AppResponse;
 import com.next.service.CarouselService;
@@ -58,7 +58,7 @@ public class IndexController extends BasicController {
         List<Movie> movies = new ArrayList<>();
         //从初始化redis中获取对应的movie信息
         for (int i = 0; i < guessULikeIndex.length; i++){
-            movies.add(JsonUtils.jsonToPojo(redis.get(CommobConstant.GUESS_MOVIE_KEY+guessULikeIndex[i]),Movie.class));
+            movies.add(JsonUtils.jsonToPojo(redis.get(CommonConstant.GUESS_MOVIE_KEY+guessULikeIndex[i]),Movie.class));
         }
         return AppResponse.success(movies);
     }

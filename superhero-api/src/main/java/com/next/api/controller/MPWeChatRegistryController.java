@@ -1,7 +1,7 @@
 package com.next.api.controller;
 
 import com.next.api.controller.basic.BasicController;
-import com.next.constant.CommobConstant;
+import com.next.constant.CommonConstant;
 import com.next.pojo.Users;
 import com.next.pojo.bo.WXSessionBO;
 import com.next.pojo.bo.WXUserBO;
@@ -67,7 +67,7 @@ public class MPWeChatRegistryController extends BasicController {
         //设置一个分布式sessionid
         String usersId = users.getId();
         String tokenId = UUID.randomUUID().toString().trim();
-        redis.set(CommobConstant.REDIS_USER_TOKEN+usersId,tokenId);
+        redis.set(CommonConstant.REDIS_USER_TOKEN+usersId,tokenId);
 
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(users,userVO);

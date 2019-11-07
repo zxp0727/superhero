@@ -1,9 +1,15 @@
 package com.next.api.controller.basic;
 
+import com.next.constant.CommonConstant;
+import com.next.pojo.Users;
+import com.next.pojo.vo.UserVO;
 import com.next.redis.RedisOperator;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 public class BasicController {
@@ -27,5 +33,18 @@ public class BasicController {
             guessULikeArray[i] = numIndex;
         }
         return guessULikeArray;
+    }
+
+    protected UserVO creatSession(Users users){
+        if(users == null){
+            return null;
+        }
+        String userId = users.getId();
+        String token = UUID.randomUUID().toString().trim();
+        redis.set(CommonConstant.REDIS_USER_TOKEN+userId,token);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(users,userVO);
+        userVO.setUserUniqueToken(token);
+        return userVO;
     }
 }
