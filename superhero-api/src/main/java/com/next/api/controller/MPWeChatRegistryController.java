@@ -1,24 +1,32 @@
 package com.next.api.controller;
 
+import com.next.api.controller.basic.BasicController;
+import com.next.constant.CommobConstant;
 import com.next.pojo.Users;
 import com.next.pojo.bo.WXSessionBO;
 import com.next.pojo.bo.WXUserBO;
+import com.next.pojo.vo.UserVO;
 import com.next.service.UserService;
 import com.next.utils.AppResponse;
 import com.next.utils.HttpClientUtil;
 import com.next.utils.JsonUtils;
-import jdk.nashorn.internal.objects.annotations.Property;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("stu")
-public class MPWeChatRegistryController {
+@RequestMapping("/stu")
+@Api(value = "微信注册登录", tags = {"微信注册登录接口"})
+public class MPWeChatRegistryController extends BasicController {
 
     @Value("${weChat.app_id}")
     private String appId;
@@ -28,9 +36,12 @@ public class MPWeChatRegistryController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/maWXLogin/{code}")
+    @ApiOperation(value = "微信注册登录", notes = "微信注册登录", httpMethod = "POST")
+    @PostMapping("/mpWXLogin/{code}")
     public AppResponse mpWeChatLogin(
+            @ApiParam(name = "code", value = "微信返回的js_code", required = true)
             @PathVariable String code,
+            @ApiParam(name = "wxUserBO", value = "微信小程序用户对象", required = true)
             @RequestBody WXUserBO wxUserBO
             ){
         if(StringUtils.isEmpty(code)){
@@ -44,15 +55,24 @@ public class MPWeChatRegistryController {
         params.put("grant_type","authorization_code");
         String result = HttpClientUtil.doGet(url,params);
         WXSessionBO wxSessionBO = JsonUtils.jsonToPojo(result, WXSessionBO.class);
-        if(wxSessionBO.getErrcode() != 0){
+        if(wxSessionBO.getErrcode() != null && wxSessionBO.getErrcode() != 0){
             return AppResponse.error(wxSessionBO.getErrmsg());
         }
 
-        Users users = userService.queryUsersByOpenId(wxSessionBO.getOpenId());
+        Users users = userService.queryUsersByOpenId(wxSessionBO.getOpenid());
         if(users == null){
-            users = userService.saveUsersForWeChat(wxSessionBO.getOpenId(), wxUserBO);
+            users = userService.saveUsersForWeChat(wxSessionBO.getOpenid(), wxUserBO);
         }
 
-        return AppResponse.success(users);
+        //设置一个分布式sessionid
+        String usersId = users.getId();
+        String tokenId = UUID.randomUUID().toString().trim();
+        redis.set(CommobConstant.REDIS_USER_TOKEN+usersId,tokenId);
+
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(users,userVO);
+        userVO.setUserUniqueToken(tokenId);
+
+        return AppResponse.success(userVO);
     }
 }

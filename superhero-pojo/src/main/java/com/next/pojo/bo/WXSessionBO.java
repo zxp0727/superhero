@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class WXSessionBO {
 
-    private String openId;
+    private String openid;
 
     private String session_key;
 

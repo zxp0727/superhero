@@ -14,6 +14,6 @@ public class WXUserBO {
     private String avatarUrl;
     @ApiModelProperty(value="头像",name="avatarUrl",example="http://next.com/abc.png", required=true)
     private String nickName;
-    @ApiModelProperty(value="使用哪个小程序[0:NEXT超英预告][1:超英预告][2:NEXT学院电影预告]",name="whichMP",example="0", required=false)
+    @ApiModelProperty(value="使用哪个小程序[0:NEXT超英预告][1:超英预告][2:NEXT学院电影预告]",name="whichMP",example="0", required=true)
     private Integer whichMP;
 }
