@@ -5,6 +5,9 @@ import com.next.utils.JqGridResult;
 
 import java.util.List;
 
+/**
+ * 电影预告服务接口
+ */
 public interface MovieService {
 
     /**

@@ -4,6 +4,9 @@ import com.next.pojo.vo.StaffVO;
 
 import java.util.List;
 
+/**
+ * 演职人员自定义服务类
+ */
 public interface StaffCustomService {
 
     /**

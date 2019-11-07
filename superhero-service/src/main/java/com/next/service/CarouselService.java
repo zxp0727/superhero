@@ -4,6 +4,9 @@ import com.next.pojo.Carousel;
 
 import java.util.List;
 
+/**
+ * 首页轮播图服务接口
+ */
 public interface CarouselService {
 
     /**

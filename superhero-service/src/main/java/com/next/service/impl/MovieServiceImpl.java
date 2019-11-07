@@ -9,6 +9,8 @@ import com.next.service.MovieService;
 import com.next.utils.JqGridResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private MovieMapper movieMapper;
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<Movie> queryHotMovieByType(String type) {
 
@@ -43,16 +46,19 @@ public class MovieServiceImpl implements MovieService {
         return movieMapper.selectByExample(example);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public int queryAllTrailerCounts() {
         return movieMapper.selectCount(new Movie());
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<Movie> queryAllMovieTrailer() {
         return movieMapper.selectAll();
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public JqGridResult queryMovieByKeyWordForPage(String keyWord, int page, int pageSize) {
         Example example = new Example(Movie.class);
@@ -75,6 +81,7 @@ public class MovieServiceImpl implements MovieService {
         return jqGridResult;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Movie getMovieByTrailerId(String trailerId) {
         return movieMapper.selectByPrimaryKey(trailerId);

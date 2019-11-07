@@ -53,8 +53,10 @@ public class IndexController extends BasicController {
     public AppResponse guessULike(){
         //1.查询所有记录预告记录数
         int counts = movieService.queryAllTrailerCounts();
+        //构建一个在记录数范围内的随机数组成的固定长度的数组
         int[] guessULikeIndex = guessULikeIndex(counts);
         List<Movie> movies = new ArrayList<>();
+        //从初始化redis中获取对应的movie信息
         for (int i = 0; i < guessULikeIndex.length; i++){
             movies.add(JsonUtils.jsonToPojo(redis.get(CommobConstant.GUESS_MOVIE_KEY+guessULikeIndex[i]),Movie.class));
         }
