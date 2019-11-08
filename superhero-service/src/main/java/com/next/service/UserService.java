@@ -42,4 +42,11 @@ public interface UserService {
      * @return
      */
     Users saveUser(UserBO userBO);
+
+    /**
+     * 修改用户对象信息
+     * @param users
+     * @return
+     */
+    Users updateUser(Users users);
 }
