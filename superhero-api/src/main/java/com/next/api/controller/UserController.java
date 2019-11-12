@@ -78,12 +78,12 @@ public class UserController extends BasicController {
 
                 String newFileName = "face-"+userId+"."+suffix;
 
-                uploadPathPrefix += File.separator+newFileName;
-
                 String finalFilePath = faceFileSpace +
                                             uploadPathPrefix +
                                             File.separator +
                                             newFileName;
+
+                uploadPathPrefix += (File.separator+newFileName);
 
                 File outFace = new File(finalFilePath);
                 if (outFace.getParentFile() != null || !outFace.getParentFile().isDirectory()) {
@@ -107,7 +107,8 @@ public class UserController extends BasicController {
         // 为了保证前端每次上传拿到的图片地址都是最新的，并且是需要刷新的
         newUserFaceUrl += ("?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN));
 
-
+        //windows路径要进行\转换
+        newUserFaceUrl = newUserFaceUrl.replace("\\","/");
         //保存到数据库
         Users users = new Users();
         users.setFaceImage(newUserFaceUrl);
@@ -115,6 +116,6 @@ public class UserController extends BasicController {
         users =userService.updateUser(users);
         //置空密码
         users.setPassword(null);
-        return AppResponse.success(creatSession(users));
+        return AppResponse.success(setUserVOToken(users));
     }
 }

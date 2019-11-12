@@ -47,4 +47,19 @@ public class BasicController {
         userVO.setUserUniqueToken(token);
         return userVO;
     }
+
+    protected UserVO setUserVOToken(Users users){
+        if(users == null){
+            return null;
+        }
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(users,userVO);
+
+        String userId = users.getId();
+        String token = redis.get(CommonConstant.REDIS_USER_TOKEN + userId);
+
+        userVO.setUserUniqueToken(token);
+
+        return userVO;
+    }
 }
