@@ -68,6 +68,9 @@ public class UserController extends BasicController {
             @ApiParam(name = "file", value = "上次头像文件", required = true)
             MultipartFile file){
 
+
+
+
         String faceFileSpace = fileConfig.getFaceFileSpace();
         String uploadPathPrefix = File.separator+userId;
         if(file != null){
