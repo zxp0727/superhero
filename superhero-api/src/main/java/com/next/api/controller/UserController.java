@@ -4,6 +4,7 @@ import com.next.api.config.FileConfig;
 import com.next.api.controller.basic.BasicController;
 import com.next.constant.CommonConstant;
 import com.next.pojo.Users;
+import com.next.pojo.bo.ModifyUserBO;
 import com.next.pojo.bo.UserBO;
 import com.next.service.UserService;
 import com.next.utils.AppResponse;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.Cleanup;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,8 +95,8 @@ public class UserController extends BasicController {
                 try {
                     @Cleanup FileOutputStream fileOutputStream = new FileOutputStream(outFace);
                     @Cleanup InputStream inputStream = file.getInputStream();
-                    fileOutputStream = new FileOutputStream(outFace);
-                    inputStream = file.getInputStream();
+                    //fileOutputStream = new FileOutputStream(outFace);
+                    //inputStream = file.getInputStream();
                     IOUtils.copy(inputStream, fileOutputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -117,5 +119,46 @@ public class UserController extends BasicController {
         //置空密码
         users.setPassword(null);
         return AppResponse.success(setUserVOToken(users));
+    }
+
+    @ApiOperation(value = "修改用户信息", notes = "修改用户信息", httpMethod = "POST")
+    @PostMapping("/modifyUserinfo")
+    public AppResponse modifyUserinfo(@RequestBody ModifyUserBO userBO){
+        String msg = checkParams(userBO);
+        if(StringUtils.isNotEmpty(msg)){
+            return AppResponse.error(msg);
+        }
+        Users users = new Users();
+        BeanUtils.copyProperties(userBO,users);
+        users.setId(userBO.getUserId());
+        Users updateUser = userService.updateUser(users);
+        updateUser.setPassword(null);
+        return AppResponse.success(setUserVOToken(updateUser));
+    }
+
+    private String checkParams(ModifyUserBO userBO){
+        String msg = "";
+        String userId = userBO.getUserId();
+        if(StringUtils.isEmpty(userId)){
+            msg = "用户ID不能为空！";
+        }
+        String birthday = userBO.getBirthday();
+        String nickname = userBO.getNickname();
+        Integer sex = userBO.getSex();
+        if(StringUtils.isEmpty(birthday) && StringUtils.isEmpty(nickname) && sex == null){
+            msg = "修改的用户信息不能为全部为空！";
+        }
+        if(sex != null && sex != 1 && sex != 0){
+            msg = "性别格式不正确 - [1:男][0:女]";
+        }
+        if(StringUtils.isNotEmpty(nickname) && nickname.length() > 12){
+            msg = "用户昵称长度不能超过12！";
+        }
+        if(StringUtils.isNotEmpty(birthday)){
+            if(!DateUtil.isValidDate(birthday,"yyyy-MM-dd")){
+                msg = "用户生日格式不正常 - [1990-01-01]";
+            }
+        }
+        return msg;
     }
 }
