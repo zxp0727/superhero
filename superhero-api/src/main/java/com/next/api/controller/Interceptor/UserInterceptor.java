@@ -2,6 +2,9 @@ package com.next.api.controller.Interceptor;
 
 import com.next.constant.CommonConstant;
 import com.next.redis.RedisOperator;
+import com.next.utils.AppResponse;
+import com.next.utils.JsonUtils;
+import lombok.Cleanup;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -9,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * 用户相关接口拦截器
@@ -34,16 +39,19 @@ public class UserInterceptor implements HandlerInterceptor {
         if(StringUtils.isNotEmpty(userId)&&StringUtils.isNotEmpty(userToken)){
             String token = redis.get(CommonConstant.REDIS_USER_TOKEN + userId);
             if(token == null){
-                System.out.println("登录已过期，请重新登录。。。");
+                //System.out.println("登录已过期，请重新登录。。。");
+                returnErrorJsonResponse(response, AppResponse.error("登录已过期，请重新登录。。。"));
                 return false;
             }
             if(!token.equals(userToken)){
-                System.out.println("异地登录，请确认账号信息。。。");
+                //System.out.println("异地登录，请确认账号信息。。。");
+                returnErrorJsonResponse(response, AppResponse.error("异地登录，请确认账号信息。。。"));
                 return false;
             }
             return true;
         }else{
-            System.out.println("请登录。。。");
+            //System.out.println("请登录。。。");
+            returnErrorJsonResponse(response, AppResponse.error("请登录。。。"));
             return false;
         }
     }
@@ -72,5 +80,17 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
+    }
+
+    public void returnErrorJsonResponse(HttpServletResponse response, AppResponse appResponse){
+        try {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/json");
+            @Cleanup OutputStream outputStream = response.getOutputStream();
+            outputStream.write(JsonUtils.objectToJson(appResponse).getBytes("utf-8"));
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
