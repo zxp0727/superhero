@@ -9,6 +9,7 @@ import com.next.pojo.bo.UserBO;
 import com.next.service.UserService;
 import com.next.utils.AppResponse;
 import com.next.utils.DateUtil;
+import com.next.utils.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -67,10 +69,6 @@ public class UserController extends BasicController {
             @RequestParam String userId,
             @ApiParam(name = "file", value = "上次头像文件", required = true)
             MultipartFile file){
-
-
-
-
         String faceFileSpace = fileConfig.getFaceFileSpace();
         String uploadPathPrefix = File.separator+userId;
         if(file != null){
@@ -80,24 +78,16 @@ public class UserController extends BasicController {
             if(StringUtils.isNotEmpty(filename)){
                 String[] split = filename.split("\\.");
                 String suffix = split[split.length-1];
-
                 String newFileName = "face-"+userId+"."+suffix;
-
-
-
-
                 String finalFilePath = faceFileSpace +
                                             uploadPathPrefix +
                                             File.separator +
                                             newFileName;
-
                 uploadPathPrefix += (File.separator+newFileName);
-
                 File outFace = new File(finalFilePath);
                 if (outFace.getParentFile() != null || !outFace.getParentFile().isDirectory()) {
                     outFace.getParentFile().mkdirs();
                 }
-
                 try {
                     @Cleanup FileOutputStream fileOutputStream = new FileOutputStream(outFace);
                     @Cleanup InputStream inputStream = file.getInputStream();
@@ -109,12 +99,10 @@ public class UserController extends BasicController {
                 }
             }
         }
-
         // 针对用户新头像，保存到数据库
         String newUserFaceUrl = fileConfig.getUrl() + uploadPathPrefix;
         // 为了保证前端每次上传拿到的图片地址都是最新的，并且是需要刷新的
         newUserFaceUrl += ("?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN));
-
         //windows路径要进行\转换
         newUserFaceUrl = newUserFaceUrl.replace("\\","/");
         //保存到数据库
@@ -167,4 +155,19 @@ public class UserController extends BasicController {
         }
         return msg;
     }
+
+    @ApiOperation(value = "excel上传", notes = "excel上传", httpMethod = "POST")
+    @PostMapping(value = "/uploadExcel", headers = "content-type=multipart/form-data")
+    public AppResponse uploadExcel(
+            @ApiParam(name = "file", value = "excel上传", required = true)
+                    MultipartFile file){
+        try {
+            List<String[]> strings = ExcelUtils.readExcel(file, 0, 0);
+            System.out.println(strings);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return AppResponse.success("success");
+    }
+
 }
