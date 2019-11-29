@@ -1,11 +1,16 @@
 package com.next.api.controller;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.json.JSONUtil;
 import com.next.api.config.FileConfig;
+import com.next.api.controller.aop.AopPermission;
 import com.next.api.controller.basic.BasicController;
 import com.next.constant.CommonConstant;
 import com.next.pojo.Users;
 import com.next.pojo.bo.ModifyUserBO;
 import com.next.pojo.bo.UserBO;
+import com.next.pojo.vo.UserVO;
 import com.next.service.UserService;
 import com.next.utils.AppResponse;
 import com.next.utils.DateUtil;
@@ -117,7 +122,8 @@ public class UserController extends BasicController {
 
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息", httpMethod = "POST")
     @PostMapping("/modifyUserinfo")
-    public AppResponse modifyUserinfo(@RequestBody ModifyUserBO userBO){
+    @AopPermission
+    public AppResponse<UserVO> modifyUserinfo(@RequestBody ModifyUserBO userBO){
         String msg = checkParams(userBO);
         if(StringUtils.isNotEmpty(msg)){
             return AppResponse.error(msg);

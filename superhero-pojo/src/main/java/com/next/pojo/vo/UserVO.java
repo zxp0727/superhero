@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Setter
 @Getter
-public class UserVO {
+public class UserVO extends BaseVO {
     private String id;
     private String username;
     private String nickname;
