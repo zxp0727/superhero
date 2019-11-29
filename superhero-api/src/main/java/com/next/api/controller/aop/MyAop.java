@@ -1,12 +1,11 @@
 package com.next.api.controller.aop;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.next.pojo.vo.BaseVO;
 import com.next.service.UserService;
 import com.next.utils.AppResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -15,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.util.List;
 
 @ControllerAdvice
 public class MyAop implements ResponseBodyAdvice {
@@ -33,8 +33,12 @@ public class MyAop implements ResponseBodyAdvice {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         AnnotatedElement annotatedElement = returnType.getAnnotatedElement();
         AopPermission aopPermission = AnnotationUtils.findAnnotation(annotatedElement, AopPermission.class);
-
         //拿当前登录用户信息
+
+        HttpHeaders headers = request.getHeaders();
+
+        List<String> headeruserid = headers.get("headeruserid");
+        System.out.println(headeruserid.get(0));
 
         String[] properties = aopPermission.properties();
         System.out.println(properties);
