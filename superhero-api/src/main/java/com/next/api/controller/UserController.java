@@ -1,8 +1,5 @@
 package com.next.api.controller;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.json.JSONUtil;
 import com.next.api.config.FileConfig;
 import com.next.api.controller.aop.AopPermission;
 import com.next.api.controller.basic.BasicController;
@@ -14,7 +11,6 @@ import com.next.pojo.vo.UserVO;
 import com.next.service.UserService;
 import com.next.utils.AppResponse;
 import com.next.utils.DateUtil;
-import com.next.utils.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -160,20 +155,6 @@ public class UserController extends BasicController {
             }
         }
         return msg;
-    }
-
-    @ApiOperation(value = "excel上传", notes = "excel上传", httpMethod = "POST")
-    @PostMapping(value = "/uploadExcel", headers = "content-type=multipart/form-data")
-    public AppResponse uploadExcel(
-            @ApiParam(name = "file", value = "excel上传", required = true)
-                    MultipartFile file){
-        try {
-            List<String[]> strings = ExcelUtils.readExcel(file, 0, 0);
-            System.out.println(strings);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return AppResponse.success("success");
     }
 
 }
